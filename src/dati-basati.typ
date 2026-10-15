@@ -545,28 +545,25 @@
     relation-schema,
   )
 
+  if entities.len() > 2 {
+    assert(
+      cardinality.len() == entities.len(),
+      message: "A relation with more than two entities must provide one cardinality per entity.",
+    )
+  }
+
   if coordinates == none {
     hide({ line(..entities, name: "tmp") })
     coordinates = "tmp.mid"
   }
 
-  let is-entities-array = (
-    type(entities.at(0)) == array,
-    type(entities.at(1)) == array,
-  )
-
-  let is-same-entity = (
-    entities.at(0) == entities.at(1)
-      or (
-        is-entities-array.at(0) and is-entities-array.at(1) and entities.at(0).at(0) == entities.at(1).at(0) // first element of each array
-      )
-      or (
-        is-entities-array.at(0) and entities.at(0).at(0) == entities.at(0) // first element of first array
-      )
-      or (
-        is-entities-array.at(1) == array and entities.at(0) == entities.at(1).at(0) // first element of second array
-      )
-  )
+  let is-entities-array = entities.map(entity => type(entity) == array)
+  let entity-names = entities.map(entity => if type(entity) == array {
+    entity.first()
+  } else {
+    entity
+  })
+  let is-same-entity = entity-names.dedup().len() == 1
 
   let is-array = type(label) == array
 
@@ -646,7 +643,7 @@
           name: coordinate-start + "-" + entities.at(i),
         )
         _draw-cardinality-box(
-          coordinate-start + "-" + entities.at(i) + ".start",
+          coordinate-start + "-" + entity-names.at(i) + ".start",
           label: cardinality.at(i),
         )
       }

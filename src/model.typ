@@ -174,10 +174,10 @@
         z.string(),
         assertions: (z.assert.length.equals(2),),
       ),
-      assertions: (z.assert.length.equals(2),),
+      assertions: (z.assert.length.min(2),),
     ),
     // (str, str)
-    z.array(z.string(), assertions: (z.assert.length.equals(2),)),
+    z.array(z.string(), assertions: (z.assert.length.min(2),)),
   ),
   name: z.string(default: ""),
   label: z.either(

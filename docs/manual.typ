@@ -646,7 +646,17 @@ Mirrored:
 
 == Relations
 
-Ideally the relation should be a straight line connecting two entities:
+Relations can connect two or more entities. For a relation involving more than two entities, pass all entity names in `entities`; the diamond is connected to each entity by its own line. You must provide exactly one cardinality per entity.
+
+```typ
+relation(
+  label: "enrolls",
+  entities: ("student", "course", "semester"),
+  cardinality: ("(0,n)", "(0,n)", "(0,n)"),
+)
+```
+
+For two entities, the relation can be drawn as a straight line:
 
 #fun(
   ```typ
