@@ -629,18 +629,23 @@
       let entity-position = utils.get-rel-entities(name, entities, ctx)
       for i in range(0, entities.len()) {
         let coordinate-start = if is-array { label.at(0) } else { label }
-        let arr = (entities.at(i),)
-        if (intersect and not is-same-axis(entities.at(i), name, ctx)) {
+        let entity-coordinate = if is-entities-array.at(i) {
+          entities.at(i).first() + "." + entities.at(i).last()
+        } else {
+          entities.at(i)
+        }
+        let arr = (entity-coordinate,)
+        if (intersect and not is-same-axis(entity-coordinate, name, ctx)) {
           let intersecton-symbol = "-|"
           if (entity-position in ("north", "south")) {
             intersecton-symbol = "|-"
           }
-          arr.push((entities.at(i), intersecton-symbol, name))
+          arr.push((entity-coordinate, intersecton-symbol, name))
         }
         arr.push(name)
         line(
           ..arr,
-          name: coordinate-start + "-" + entities.at(i),
+          name: coordinate-start + "-" + entity-names.at(i),
         )
         _draw-cardinality-box(
           coordinate-start + "-" + entity-names.at(i) + ".start",

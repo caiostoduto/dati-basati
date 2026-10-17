@@ -213,10 +213,18 @@
 /// -> string
 #let get-rel-entities(center, subentities, ctx) = {
   let (x, y) = cetz.coordinate.resolve(ctx, center).at(1).slice(0, 2)
-  let (x1, y1) = cetz.coordinate.resolve(ctx, subentities.first()).at(1).slice(0, 2)
+  let first-entity = subentities.first()
+  if type(first-entity) == array {
+    first-entity = first-entity.first() + "." + first-entity.last()
+  }
+  let (x1, y1) = cetz.coordinate.resolve(ctx, first-entity).at(1).slice(0, 2)
 
   if subentities.len() > 1 {
-    let (x2, y2) = cetz.coordinate.resolve(ctx, subentities.last()).at(1).slice(0, 2)
+    let last-entity = subentities.last()
+    if type(last-entity) == array {
+      last-entity = last-entity.first() + "." + last-entity.last()
+    }
+    let (x2, y2) = cetz.coordinate.resolve(ctx, last-entity).at(1).slice(0, 2)
 
     return if (x2 == x1) {
       if x1 > x {
